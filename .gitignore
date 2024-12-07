@@ -1,0 +1,32 @@
+# Ignore all .bin files
+*.bin
+
+# Ignore node_modules directory (commonly used in JavaScript/Node.js projects)
+node_modules/
+
+# Ignore build directories
+build/
+dist/
+
+# Ignore temporary files
+*.log
+*.tmp
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Windows system files
+Thumbs.db
+
+# Ignore IDE/editor-specific files
+.vscode/
+.idea/
+
+# Ignore compiled Python files
+*.pyc
+
+# Ignore Java class files
+*.class
+
+# Ignore environment-specific files
+.env
