@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "iostream": "cpp",
+    "valarray": "cpp",
+    "cstdlib": "cpp",
+    "iosfwd": "cpp",
+    "ostream": "cpp",
+    "cmath": "cpp",
+    "complex": "cpp",
+    "iomanip": "cpp"
+  }
+}

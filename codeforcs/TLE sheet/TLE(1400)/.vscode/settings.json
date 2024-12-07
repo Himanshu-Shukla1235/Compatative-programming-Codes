@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "cstdlib": "cpp",
+    "iostream": "cpp",
+    "ostream": "cpp",
+    "functional": "cpp",
+    "valarray": "cpp",
+    "random": "cpp",
+    "chrono": "cpp",
+    "limits": "cpp",
+    "numeric": "cpp"
+  }
+}
