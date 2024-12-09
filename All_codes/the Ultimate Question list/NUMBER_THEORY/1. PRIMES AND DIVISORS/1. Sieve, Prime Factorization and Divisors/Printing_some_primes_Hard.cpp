@@ -68,7 +68,69 @@ ll reverseNumber(ll num); //  O(n)
                                                                                                                                                                        //|
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
+// Function to generate primes up to sqrt(R) using the classic sieve
+vector<ll> generatePrimes(ll limit)
+{
+    vector<bool> isPrime(limit + 1, true);
+    vector<ll> primes;
+    isPrime[0] = isPrime[1] = false;
 
+    for (ll i = 2; i * i <= limit; i++)
+    {
+        if (isPrime[i])
+        {
+            for (ll j = i * i; j <= limit; j += i)
+            {
+                isPrime[j] = false;
+            }
+        }
+    }
+
+    for (ll i = 2; i <= limit; i++)
+    {
+        if (isPrime[i])
+        {
+            primes.push_back(i);
+        }
+    }
+    return primes;
+}
+vector<ll> finprime;
+// Function to find primes in the range [L, R] using the segmented sieve
+void segmentedSieve(ll L, ll R)
+{
+    ll limit = sqrt(R);
+    vector<ll> primes = generatePrimes(limit);
+
+    // Marking numbers in the range [L, R] as prime initially
+    vector<bool> isPrime(R - L + 1, true);
+
+    for (ll prime : primes)
+    {
+        // Find the first multiple of prime within the range [L, R]
+        ll firstMultiple = max(prime * prime, (L + prime - 1) / prime * prime);
+
+        for (ll j = firstMultiple; j <= R; j += prime)
+        {
+            isPrime[j - L] = false;
+        }
+    }
+
+    // Handle the case when L is 1 (1 is not a prime number)
+    if (L == 1)
+    {
+        isPrime[0] = false;
+    }
+
+    // Output the primes in the range [L, R]
+    for (ll i = 0; i <= R - L; i++)
+    {
+        if (isPrime[i])
+        {
+            finprime.push_back(i+L);
+        }
+    }
+}
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -85,44 +147,17 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
 
-    vector<ll> f(5 * 1e6 + 1, 0);
-    vector<ll> presum;
+    segmentedSieve(2, 1e6);
+    segmentedSieve(1e6 + 1, 1e7);
+   
 
-    for (ll i = 2; i <= 5 * 1e6; i++)
+    for (ll i = 0; i < finprime.size(); i += 500)
     {
-        if (f[i] == 0) // i is prime
-        {
-            for (ll j = i; j <= 5 * 1e6; j += i)
-            {
-                ll num = j;
-                while (num % i == 0) // Count how many times 'i' divides 'j'
-                {
-                    f[j]++;
-                    num /= i;
-                }
-            }
-        }
+        COUT(finprime[i]);
     }
 
-    ll precnt = 0;
-    AUTO_IT(f)
-    {
-        precnt += val;
-        presum.push_back(precnt);
-    }
-
-    vector<pair<ll, ll>> vp(n);
-
-    AUTO_IT(vp)
-    {
-        cin >> val.first >> val.second;
-        ll a = val.first, b = val.second;
-
-        COUT(presum[a] - presum[b]);
-    }
+    COUT("");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________
