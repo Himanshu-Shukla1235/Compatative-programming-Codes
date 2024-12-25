@@ -2,7 +2,7 @@
 /*
                                              >  V I R U P A K S H  <                                                                                                                                                                   //|
                                                                                                                                                                        //|
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>__           __<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>__           __<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
@@ -15,41 +15,41 @@ using namespace std;
 #define ll long long int
 #define maxi INT_MAX
 #define mini INT_MIN
-#define FOR(i,x, n) for (int i = x; i < (n); ++i)
-#define FOR_RE(i, n) for (int i = n-1; i >= 0; --i)
-#define AUTO_IT(X)  for(auto &val:X)
+#define FOR(i, x, n) for (int i = x; i < (n); ++i)
+#define FOR_RE(i, n) for (int i = n - 1; i >= 0; --i)
+#define AUTO_IT(X) for (auto &val : X)
 #define VEC(type, name, size) vector<type> name(size)
 #define VEC_PAIR(T1, T2, name, size) vector<pair<T1, T2>> name(size)
- #define VEC_PAIR_NO_SIZE(T1, T2, name) vector<pair<T1, T2>> name
+#define VEC_PAIR_NO_SIZE(T1, T2, name) vector<pair<T1, T2>> name
 #define COUT(x) cout << x << "\n"
 #define IS_EVEN(x) ((x) % 2 == 0)
 #define IS_ODD(x) ((x) % 2 != 0)
 
 //*.......................... function declarations ................................>
- 
+
 void logic(); // Time complexity depends on implementation details
- void logic2();
- void logic3();
+void logic2();
+void logic3();
 
 ll factorial(ll n); // O(n)
 
-ll power(ll base, ll exp); // O(log exp) 
+ll power(ll base, ll exp); // O(log exp)
 
-vector<ll> sieve(ll max_n); // O(max_n log log max_n) 
+vector<ll> sieve(ll max_n); // O(max_n log log max_n)
 
-ll maxSumSubarray(const vector<ll> &arr); // O(n) 
+ll maxSumSubarray(const vector<ll> &arr); // O(n)
 
-vector<ll> getFactors(ll n); // O(sqrt(n)) 
+vector<ll> getFactors(ll n); // O(sqrt(n))
 
-ll gcd(ll a, ll b); // O(log(min(a, b))) 
+ll gcd(ll a, ll b); // O(log(min(a, b)))
 
-ll lcm(ll a, ll b); // O(log(min(a, b))) 
+ll lcm(ll a, ll b); // O(log(min(a, b)))
 
 ll reverseNumber(ll num); //  O(n)
 
 //*..................................................................................>
 /*
- 
+
                                                                                                                                                                        //|
                                                                                                                                                                        //|
                                                                                                                                                                        //|
@@ -59,28 +59,43 @@ ll reverseNumber(ll num); //  O(n)
                                                                                                                                                                        //|
  //* _________________some imp useful functions _______________
 
- 
-  || decToBin : TC-logn | SC-logn ||  
-  || binpow : TC-logn | SC-O(1) ||  
-  || fastfib : TC-logn | SC-O(1) ||  
-  || nCr : TC-o(r) | SC-O(1) ||  
+
+  || decToBin : TC-logn | SC-logn ||
+  || binpow : TC-logn | SC-O(1) ||
+  || fastfib : TC-logn | SC-O(1) ||
+  || nCr : TC-o(r) | SC-O(1) ||
 
  ......NUM_THEORY.....
-  || pollardRhoFunc : TC- (n)^1/4  | for  findint he factos   || 
-  || eulerTotientSieve : TC- nlognlogn |  counts the integers from 1 to n that are coprime with n || 
-  
-  
-  
+  || pollardRhoFunc : TC- (n)^1/4  | for  findint he factos   ||
+  || eulerTotientSieve : TC- nlognlogn |  counts the integers from 1 to n that are coprime with n ||
+
+
+
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
- 
+
+// Function to convert decimal to binary
+string decimalToBinary(int n)
+{
+    if (n == 0)
+        return "0";
+
+    string binary = "";
+    while (n > 0)
+    {
+        binary = to_string(n % 2) + binary;
+        n /= 2;
+    }
+    return binary;
+}
+
 int main()
 {
-  ios::sync_with_stdio(false); // Disable synchronization
-   cin.tie(nullptr); // Untie cin from cout
- 
-    int t;
-    cin >> t;
+    ios::sync_with_stdio(false); // Disable synchronization
+    cin.tie(nullptr);            // Untie cin from cout
+
+    int t = 1;
+
     while (t--)
     {
         logic();
@@ -90,7 +105,39 @@ int main()
 
 void logic()
 {
-    // write the logic here 
+    ll n, k;
+    cin >> n >> k;
+
+    ll ans1 = -1, ans2 = -1, ans3 = -1;
+
+    for (ll i = 1; i <= n; i++)
+    {
+        ll a = i;
+        for (ll j = i + 1; j <= n; j++)
+        {
+            ll b = j;
+
+            if ((a & b) < k)
+            {
+                ans1 = max(ans1, a & b);
+                
+            }
+
+            if ((a | b) < k)
+            {
+                ans2 = max(ans2, a | b);
+            }
+
+            if ((a ^ b) < k)
+            {
+                ans3 = max(ans3, a ^ b);
+            }
+        }
+    }
+
+    cout << ans1 << endl;
+    cout << ans2 << endl;
+    cout << ans3 << endl;
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________
@@ -114,31 +161,41 @@ void logic()
 */
 //*________________________________ function codes ___________________________________________ >
 
-            // 1.....................factorial function............................
+// 1.....................factorial function............................
 
-ll factorial(ll n) {
-    if (n <= 1) return 1;
+ll factorial(ll n)
+{
+    if (n <= 1)
+        return 1;
     return n * factorial(n - 1);
 }
 
-          // 2..........................power function.......................................
-ll power(ll base, ll exp) {
-    if (exp == 0) return 1;
-    if (exp % 2 == 0) {
+// 2..........................power function.......................................
+ll power(ll base, ll exp)
+{
+    if (exp == 0)
+        return 1;
+    if (exp % 2 == 0)
+    {
         ll half = power(base, exp / 2);
         return half * half;
-    } else {
+    }
+    else
+    {
         return base * power(base, exp - 1);
     }
 }
-           // 3..........................function to get factors.......................................
+// 3..........................function to get factors.......................................
 vector<ll> getFactors(ll n)
 {
     vector<ll> factors;
-    for (ll i = 1; i * i <= n; ++i) {
-        if (n % i == 0) {
+    for (ll i = 1; i * i <= n; ++i)
+    {
+        if (n % i == 0)
+        {
             factors.push_back(i);
-            if (i != n / i) { // To avoid adding the square root twice
+            if (i != n / i)
+            { // To avoid adding the square root twice
                 factors.push_back(n / i);
             }
         }
@@ -147,14 +204,18 @@ vector<ll> getFactors(ll n)
     return factors;
 }
 //        4..........................Sieve of Eratosthenes function.......................................
-vector<ll> sieve(ll max_n) {
+vector<ll> sieve(ll max_n)
+{
     vector<bool> is_prime(max_n + 1, true);
     vector<ll> primes;
     is_prime[0] = is_prime[1] = false;
-    for (ll i = 2; i <= max_n; ++i) {
-        if (is_prime[i]) {
+    for (ll i = 2; i <= max_n; ++i)
+    {
+        if (is_prime[i])
+        {
             primes.push_back(i);
-            for (ll j = i * i; j <= max_n; j += i) {
+            for (ll j = i * i; j <= max_n; j += i)
+            {
                 is_prime[j] = false;
             }
         }
@@ -162,10 +223,12 @@ vector<ll> sieve(ll max_n) {
     return primes;
 }
 //          5..........................Max Sum Subarray (Kadane's Algorithm).......................................
-ll maxSumSubarray(const vector<ll> &arr) {
+ll maxSumSubarray(const vector<ll> &arr)
+{
     ll max_sum = arr[0];
     ll current_sum = arr[0];
-    for (size_t i = 1; i < arr.size(); ++i) {
+    for (size_t i = 1; i < arr.size(); ++i)
+    {
         current_sum = max(arr[i], current_sum + arr[i]);
         max_sum = max(max_sum, current_sum);
     }
@@ -186,13 +249,15 @@ ll gcd(ll a, ll b)
 // 7..........................function to find LCM...........................................
 ll lcm(ll a, ll b)
 {
-    return (a / gcd(a, b)) * b;  // LCM formula
+    return (a / gcd(a, b)) * b; // LCM formula
 }
 
 // 8..........................function to find Reverse...........................................
-ll reverseNumber(ll num) {
+ll reverseNumber(ll num)
+{
     ll reversed = 0;
-    while (num > 0) {
+    while (num > 0)
+    {
         reversed = reversed * 10 + num % 10;
         num /= 10;
     }
