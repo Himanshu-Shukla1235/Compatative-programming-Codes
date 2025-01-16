@@ -24,7 +24,7 @@ using namespace std;
 #define COUT(x) cout << x << "\n"
 #define IS_EVEN(x) ((x) % 2 == 0)
 #define IS_ODD(x) ((x) % 2 != 0)
-
+#define MOD 100000007
 //*.......................... function declarations ................................>
 
 void logic(); // Time complexity depends on implementation details
@@ -73,7 +73,23 @@ ll reverseNumber(ll num); //  O(n)
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
+// Function to compute (base^exp) % MOD using modular exponentiation
+ll pow_exp(ll b, ll p)
+{
+    ll re = 1;
+    b %= MOD;
+    while (p > 0)
+    {
+        if (p % 2 == 1)
+        {
+            re = (re * b) % MOD;
+        }
 
+        b = (b * (b)) % MOD;
+        p >>= 1;
+    }
+    return re;
+}
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -81,67 +97,32 @@ int main()
 
     int t;
     cin >> t;
-    ll cnt = 1;
+    ll i = 1;
     while (t--)
-
     {
-
-        // cout << cnt << " ";
+        cout << "Case " << i << ":" << " ";
         logic();
-        cnt++;
+        i++;
     }
     return 0;
 }
 
 void logic()
 {
-    ll n, d;
-
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
-
-    // for 3
-
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    ll n;
+    cin >> n;
+    vector<ll> v(n);
+    AUTO_IT(v)
     {
-        ans.push_back(3);
+        cin >> val;
     }
-
-    // for 5
-    if (d == 5)
+    ll re = 0;
+    
+    FOR(i, 0, n)
     {
-        ans.push_back(5);
+        re = (re+pow_exp(2, n - 1)%MOD *(v[i]%MOD))%MOD;
     }
-
-    // for 7
-
-    if (n >= 3 || d == 7)
-    {
-        ans.push_back(7);
-    }
-
-    // for 9
-
-    if (n >= 6 || d == 9)
-    {
-        ans.push_back(9);
-    }
-    else if (n >= 3 && d == 3)
-    {
-        ans.push_back(9);
-    }
-
-    FOR(i, 0, ans.size())
-    {
-        cout << ans[i] << " ";
-    }
-    COUT("");
+    COUT(re);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

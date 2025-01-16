@@ -73,7 +73,30 @@ ll reverseNumber(ll num); //  O(n)
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
+ll tI(vector<ll> &v, ll n, ll a, ll b, ll p, ll i)
+{
+    ll l = p, r = i-1;
+    ll s1 = abs(v[p] - v[i]) * b;
+    ll ans = p;
+    while (l <= r)
+    {
+        ll mid = l + ((r - l) / 2);
+        ll s = abs(v[mid] - v[p]) * a + abs(v[mid] - v[i]) * b;
 
+        if (s1 < s)
+        {
+            r = mid - 1;
+        }
+        else
+        {
+            ans = mid;
+            s1 = s;
+            l = mid + 1;
+        }
+    }
+    cout << ans << " ";
+    return ans;
+}
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -81,67 +104,35 @@ int main()
 
     int t;
     cin >> t;
-    ll cnt = 1;
     while (t--)
-
     {
-
-        // cout << cnt << " ";
         logic();
-        cnt++;
     }
     return 0;
 }
 
 void logic()
 {
-    ll n, d;
+    ll n, a, b;
+    cin >> n >> a >> b;
 
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
+    vector<ll> v(n + 1);
 
-    // for 3
-
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    v[0] = 0;
+    FOR(i, 1, n + 1)
     {
-        ans.push_back(3);
+        cin >> v[i];
     }
-
-    // for 5
-    if (d == 5)
+    ll re = 0, p = 0;
+    FOR(i, 1, n + 1)
     {
-        ans.push_back(5);
-    }
 
-    // for 7
+        ll t = tI(v, n, a, b, p, i);
 
-    if (n >= 3 || d == 7)
-    {
-        ans.push_back(7);
+        re += abs(v[p] - v[t]) * a + abs(v[t] - v[i]) * b;
+        p = t; 
     }
-
-    // for 9
-
-    if (n >= 6 || d == 9)
-    {
-        ans.push_back(9);
-    }
-    else if (n >= 3 && d == 3)
-    {
-        ans.push_back(9);
-    }
-
-    FOR(i, 0, ans.size())
-    {
-        cout << ans[i] << " ";
-    }
-    COUT("");
+    COUT(re);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

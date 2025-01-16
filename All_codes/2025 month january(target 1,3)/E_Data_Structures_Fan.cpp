@@ -81,67 +81,76 @@ int main()
 
     int t;
     cin >> t;
-    ll cnt = 1;
     while (t--)
-
     {
-
-        // cout << cnt << " ";
         logic();
-        cnt++;
     }
     return 0;
 }
 
 void logic()
 {
-    ll n, d;
+    ll n, q;
+    cin >> n;
 
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
-
-    // for 3
-
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    vector<ll> v(n);
+    for (auto &val : v)
     {
-        ans.push_back(3);
+        cin >> val;
+    }
+    string s;
+    vector<ll> prev(n + 1); // vector to store the prev xor
+
+    cin >> s;
+    cin >> q;
+    ll x0 = 0, x1 = 0;
+    prev[1] = v[0];
+    FOR(i, 0, n)
+    {
+        if (s[i] == '0')
+        {
+            x0 = x0 ^ v[i];
+        }
+        else
+        {
+            x1 = x1 ^ v[i];
+        }
+        // store the prev xor
+
+        if (i != 0)
+        {
+            prev[i + 1] = v[i] ^ prev[i];
+        }
     }
 
-    // for 5
-    if (d == 5)
-    {
-        ans.push_back(5);
-    }
+    // soving the quiries
 
-    // for 7
-
-    if (n >= 3 || d == 7)
+    FOR(i, 0, q)
     {
-        ans.push_back(7);
-    }
+        ll a, b, c;
+        cin >> a;
+        cin >> b;
+        if (a == 1)
+        {
+            cin >> c;
 
-    // for 9
-
-    if (n >= 6 || d == 9)
-    {
-        ans.push_back(9);
+            ll part = prev[c] ^ prev[b - 1];
+            x0 = x0 ^ part;
+            x1 = x1 ^ part;
+        }
+        else
+        {
+            if (b == 0)
+            {
+                cout<<x0 << " ";
+            }
+            else
+            {
+                cout<<x1 << " ";
+            }
+        }
     }
-    else if (n >= 3 && d == 3)
-    {
-        ans.push_back(9);
-    }
-
-    FOR(i, 0, ans.size())
-    {
-        cout << ans[i] << " ";
-    }
-    COUT("");
+    COUT(" ");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

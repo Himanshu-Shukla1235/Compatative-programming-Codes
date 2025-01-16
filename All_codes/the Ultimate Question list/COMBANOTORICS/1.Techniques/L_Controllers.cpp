@@ -79,69 +79,83 @@ int main()
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
-    ll cnt = 1;
+    int t = 1;
+
     while (t--)
-
     {
-
-        // cout << cnt << " ";
         logic();
-        cnt++;
     }
     return 0;
 }
 
 void logic()
 {
-    ll n, d;
-
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
-
-    // for 3
-
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    ll n, q;
+    cin >> n;
+    string s;
+    cin >> s;
+    cin >> q;
+    vector<pair<ll, ll>> v(q);
+    for (auto &val : v)
     {
-        ans.push_back(3);
+        cin >> val.first >> val.second;
     }
 
-    // for 5
-    if (d == 5)
+    ll p = 0, m = 0;
+    for (char c : s)
     {
-        ans.push_back(5);
+        if (c == '+')
+        {
+            p++;
+        }
+        else
+        {
+            m++;
+        }
     }
+// Calculate the total difference (p - m)
+    ll tot = p - m; 
 
-    // for 7
-
-    if (n >= 3 || d == 7)
+    for (int i = 0; i < q; i++)
     {
-        ans.push_back(7);
-    }
+        ll a = v[i].first;
+        ll b = v[i].second;
 
-    // for 9
+// Special case: tot = 0
+        if (tot == 0)
+        {
 
-    if (n >= 6 || d == 9)
-    {
-        ans.push_back(9);
-    }
-    else if (n >= 3 && d == 3)
-    {
-        ans.push_back(9);
-    }
+            cout << "YES\n";
+            continue;
+        }
+        
+ // Special case: a = b
+        if (a == b)
+        {
+           
+            cout << "NO\n";
+            continue;
+        }
 
-    FOR(i, 0, ans.size())
-    {
-        cout << ans[i] << " ";
+        // Check divisibility
+        if ((tot * b) % (b - a) != 0)
+        {
+            cout << "NO\n";
+            continue;
+        }
+
+        ll k = (tot * b) / (b - a); 
+
+        // Check if k is within the valid range
+        if (k >= -m && k <= p)
+        {
+            cout << "YES\n";
+        }
+        else
+        {
+            cout << "NO\n";
+        }
     }
-    COUT("");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

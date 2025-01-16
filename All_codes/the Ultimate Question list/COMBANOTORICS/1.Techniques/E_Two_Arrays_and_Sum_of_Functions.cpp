@@ -2,7 +2,7 @@
 /*
                                              >  V I R U P A K S H  <                                                                                                                                                                   //|
                                                                                                                                                                        //|
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>__           __<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>__  ⭐⭐⭐         __<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
@@ -24,6 +24,7 @@ using namespace std;
 #define COUT(x) cout << x << "\n"
 #define IS_EVEN(x) ((x) % 2 == 0)
 #define IS_ODD(x) ((x) % 2 != 0)
+#define MOD 998244353
 
 //*.......................... function declarations ................................>
 
@@ -79,69 +80,52 @@ int main()
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
-    ll cnt = 1;
+    int t = 1;
+
     while (t--)
-
     {
-
-        // cout << cnt << " ";
         logic();
-        cnt++;
     }
     return 0;
 }
 
+// by ussing the weight method-imp concept
 void logic()
 {
-    ll n, d;
+    ll n;
+    cin >> n;
 
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
+    vector<ll> v(n);
 
-    // for 3
+    vector<ll> v1(n);
 
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    AUTO_IT(v)
     {
-        ans.push_back(3);
+        cin >> val;
     }
 
-    // for 5
-    if (d == 5)
+    AUTO_IT(v1)
     {
-        ans.push_back(5);
+        cin >> val;
     }
 
-    // for 7
+    sort(v1.begin(), v1.end());
 
-    if (n >= 3 || d == 7)
+    // calculating wieght
+    vector<ll> w(n);
+
+    FOR(i, 0, n)
     {
-        ans.push_back(7);
+        w[i] = (i + 1) * (n - i) * v[i];
+    }
+    sort(w.rbegin(), w.rend());
+    ll re = 0;
+    FOR(i, 0, n)
+    {
+        re = (re + ((w[i]) % MOD * (v1[i] % MOD)) % MOD) % MOD;
     }
 
-    // for 9
-
-    if (n >= 6 || d == 9)
-    {
-        ans.push_back(9);
-    }
-    else if (n >= 3 && d == 3)
-    {
-        ans.push_back(9);
-    }
-
-    FOR(i, 0, ans.size())
-    {
-        cout << ans[i] << " ";
-    }
-    COUT("");
+    COUT(re);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

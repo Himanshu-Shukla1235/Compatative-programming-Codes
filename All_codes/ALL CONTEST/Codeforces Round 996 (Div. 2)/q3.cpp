@@ -74,6 +74,13 @@ ll reverseNumber(ll num); //  O(n)
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
 
+void printMap(const map<ll, ll> &m)
+{
+    for (auto it = m.begin(); it != m.end(); ++it)
+    {
+        cout << "Key: " << it->first << ", Value: " << it->second << endl;
+    }
+}
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -81,67 +88,119 @@ int main()
 
     int t;
     cin >> t;
-    ll cnt = 1;
     while (t--)
-
     {
-
-        // cout << cnt << " ";
         logic();
-        cnt++;
     }
     return 0;
 }
 
 void logic()
 {
-    ll n, d;
+    ll n, m;
+    cin >> n >> m;
+    string s;
+    cin >> s;
 
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
+    vector<vector<int>> v(n, vector<int>(m, 0));
 
-    // for 3
+    // For rows
+    map<ll, ll> mp;
 
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    // For columns
+    map<ll, ll> mp1;
+
+    // Sum for rows
+    map<ll, ll> sum;
+
+    // Sum for columns
+    map<ll, ll> sum1;
+
+    for (ll i = 0; i < n; i++)
     {
-        ans.push_back(3);
-    }
+        for (ll j = 0; j < m; j++)
+        {
 
-    // for 5
-    if (d == 5)
+            cin >> v[i][j];
+            ll x = v[i][j];
+
+            sum1[j] += x;
+            sum[i] += x;
+        }
+    }
+    ll r = 0, c = 0;
+    FOR(i, 0, s.size())
     {
-        ans.push_back(5);
+        mp[r]++;
+        mp1[c]++;
+        if (s[i] == 'D')
+        {
+            r++;
+        }
+        else
+        {
+            c++;
+        }
     }
-
-    // for 7
-
-    if (n >= 3 || d == 7)
+    mp[r]++;
+    mp1[c]++;
+    r = 0, c = 0;
+    for (ll i = 0; i < s.size(); i++)
     {
-        ans.push_back(7);
-    }
 
-    // for 9
+        if (mp[r] > mp1[c])
+        {
 
-    if (n >= 6 || d == 9)
-    {
-        ans.push_back(9);
-    }
-    else if (n >= 3 && d == 3)
-    {
-        ans.push_back(9);
-    }
+            sum[r] += (-sum1[c]);
+            v[r][c] = -sum1[c];
+            mp[r]--;
+            mp1[c]--;
+            sum1[c] = 0;
+        }
+        else
+        {
 
-    FOR(i, 0, ans.size())
-    {
-        cout << ans[i] << " ";
+            sum1[c] += (-sum[r]);
+            v[r][c] = -sum[r];
+            mp[r]--;
+            mp1[c]--;
+            sum[r] = 0;
+        }
+        if (s[i] == 'D')
+        {
+            r++;
+        }
+        else
+        {
+            c++;
+        }
     }
-    COUT("");
+    if (mp[r] > mp1[c])
+    {
+
+        sum[r] += (-sum1[c]);
+        v[r][c] = -sum1[c];
+        mp[r]--;
+        mp1[c]--;
+        sum1[c] = 0;
+    }
+    else
+    {
+
+        sum1[c] += (-sum[r]);
+        v[r][c] = -sum[r];
+        mp[r]--;
+        mp1[c]--;
+        sum[r] = 0;
+    }
+    for (ll i = 0; i < n; i++)
+    {
+        for (ll j = 0; j < m; j++)
+        {
+            cout << v[i][j] << " ";
+        }
+        cout << "\n";
+    }
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

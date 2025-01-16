@@ -79,69 +79,34 @@ int main()
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
-    ll cnt = 1;
+    int t=1;
+   
     while (t--)
-
     {
-
-        // cout << cnt << " ";
         logic();
-        cnt++;
     }
     return 0;
 }
 
 void logic()
 {
-    ll n, d;
+    ll n, s;
 
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
+    cin >> n;
+    cin >> s;
 
-    // for 3
+    ll a = 1 << s;
 
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    bool re = n & a;
+
+    if (re)
     {
-        ans.push_back(3);
+        COUT("true");
     }
-
-    // for 5
-    if (d == 5)
+    else
     {
-        ans.push_back(5);
+        COUT("false");
     }
-
-    // for 7
-
-    if (n >= 3 || d == 7)
-    {
-        ans.push_back(7);
-    }
-
-    // for 9
-
-    if (n >= 6 || d == 9)
-    {
-        ans.push_back(9);
-    }
-    else if (n >= 3 && d == 3)
-    {
-        ans.push_back(9);
-    }
-
-    FOR(i, 0, ans.size())
-    {
-        cout << ans[i] << " ";
-    }
-    COUT("");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

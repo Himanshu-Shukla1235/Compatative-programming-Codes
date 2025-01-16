@@ -81,67 +81,41 @@ int main()
 
     int t;
     cin >> t;
-    ll cnt = 1;
     while (t--)
-
     {
-
-        // cout << cnt << " ";
         logic();
-        cnt++;
     }
     return 0;
 }
 
 void logic()
 {
-    ll n, d;
-
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
-
-    // for 3
-
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    ll n;
+    cin >> n;
+    vector<ll> a(n);
+    vector<ll> b(n);
+    AUTO_IT(a)
     {
-        ans.push_back(3);
+        cin >> val;
     }
-
-    // for 5
-    if (d == 5)
+    AUTO_IT(b)
     {
-        ans.push_back(5);
+        cin >> val;
     }
-
-    // for 7
-
-    if (n >= 3 || d == 7)
+    vector<ll> re(n);
+    FOR(i, 0, n)
     {
-        ans.push_back(7);
+        re[i] = (a[i] - b[i]);
     }
-
-    // for 9
-
-    if (n >= 6 || d == 9)
+    sort(re.begin(), re.end());
+    if (abs(re[0]) <= re[1])
     {
-        ans.push_back(9);
+        COUT("YES");
     }
-    else if (n >= 3 && d == 3)
+    else
     {
-        ans.push_back(9);
+        COUT("NO");
     }
-
-    FOR(i, 0, ans.size())
-    {
-        cout << ans[i] << " ";
-    }
-    COUT("");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

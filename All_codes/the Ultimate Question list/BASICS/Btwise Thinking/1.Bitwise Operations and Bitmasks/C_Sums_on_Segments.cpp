@@ -81,65 +81,117 @@ int main()
 
     int t;
     cin >> t;
-    ll cnt = 1;
     while (t--)
-
     {
-
-        // cout << cnt << " ";
         logic();
-        cnt++;
     }
     return 0;
 }
 
 void logic()
 {
-    ll n, d;
+    ll n;
+    cin >> n;
 
-    cin >> n >> d;
-    vector<ll> ans;
-    // vector<pair<int, int>> v3 = {{1, 3}, {2, 3}, {3, 1}, {4, 3}, {5, 3}, {6, 1}, {7, 3}, {8, 3}, {9, 1}};
-    //  vector<pair<int, int>> v7 = {{1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 3}, {7, 1}, {8, 6}, {9, 6}};
-    //  vector<pair<int, int>> v9 = {{1, 9}, {2, 9}, {3, 3}, {4, 9}, {5, 9}, {6, 9}, {7, 9}, {8, 9}, {9, 1}};
-    // cout << n << " | " << d << endl;
-    // for 1
-    ans.push_back(1);
-
-    // for 3
-
-    if (n >= 3 || d == 6 || d == 3 || d == 9)
+    vector<ll> v(n);
+    AUTO_IT(v)
     {
-        ans.push_back(3);
+        cin >> val;
     }
 
-    // for 5
-    if (d == 5)
+    set<ll> s;
+    ll diff = -1;
+
+    // for empty
+    s.insert(0);
+
+    // for 1;
+    ll sum = 0;
+    for (ll i = 0; i < n; i++)
     {
-        ans.push_back(5);
+        if (v[i] != 1 && v[i] != -1)
+        {
+            sum = 0;
+            diff = i;
+            continue;
+        }
+        if (v[i] == 1)
+        {
+            sum++;
+            s.insert(sum);
+        }
+        else
+        {
+            sum--;
+            if (sum <= 0)
+            {
+                sum = 0;
+            }
+        }
     }
 
-    // for 7
-
-    if (n >= 3 || d == 7)
+    // for -1
+    sum = 0;
+    for (ll i = 0; i < n; i++)
     {
-        ans.push_back(7);
+        if (v[i] != 1 && v[i] != -1)
+        {
+            sum = 0;
+            diff = i;
+            s.insert(v[i]);
+            continue;
+        }
+        if (v[i] == 1)
+        {
+            sum++;
+
+            if (sum >= 0)
+            {
+                sum = 0;
+            }
+        }
+        else
+        {
+            sum--;
+            s.insert(sum);
+        }
     }
 
-    // for 9
+    // for diff element
+    ll maxmecn = 0;
+    ll mincn = 0;
+    sum = v[diff];
+    ll sum1 = v[diff];
+    if (diff != -1)
+    {
+        ll maxmm = v[diff];
+        ll minmm = v[diff];
 
-    if (n >= 6 || d == 9)
-    {
-        ans.push_back(9);
-    }
-    else if (n >= 3 && d == 3)
-    {
-        ans.push_back(9);
+        FOR_RE(i, diff)
+        {
+            sum += v[i];
+            maxmm = max(maxmm,  sum);
+            minmm = min(minmm,  sum);
+        }
+
+        FOR(i, diff + 1, n)
+        {
+            sum1 += v[i];
+            maxmm = max(maxmm, sum1);
+            minmm = min(minmm, sum1);
+        }
+        // cout << maxmm << "|" << minmm << " ";
+        FOR(i, minmm, maxmm + 1)
+        {
+            s.insert(i);
+        }
     }
 
-    FOR(i, 0, ans.size())
+    // COUT ans ;
+    COUT(s.size());
+    AUTO_IT(s)
     {
-        cout << ans[i] << " ";
+        cout << val << " ";
     }
     COUT("");
 }
