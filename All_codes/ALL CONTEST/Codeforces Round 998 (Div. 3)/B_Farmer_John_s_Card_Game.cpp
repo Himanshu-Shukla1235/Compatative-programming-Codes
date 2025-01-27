@@ -24,7 +24,6 @@ using namespace std;
 #define COUT(x) cout << x << "\n"
 #define IS_EVEN(x) ((x) % 2 == 0)
 #define IS_ODD(x) ((x) % 2 != 0)
-#define MOD 1000000007
 
 //*.......................... function declarations ................................>
 
@@ -60,12 +59,12 @@ ll reverseNumber(ll num); //  O(n)
                                                                                                                                                                        //|
  //* _________________some imp useful functions _______________
 
-  ......General...........
+
   || decToBin : TC-logn | SC-logn ||
   || binpow : TC-logn | SC-O(1) ||
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
-  || modExpone
+  || modExp : TC-o(logb) | SC-O(1) || b->power
 
  ......NUM_THEORY.....
   || pollardRhoFunc : TC- (n)^1/4  | for  findint he factos   ||
@@ -73,29 +72,18 @@ ll reverseNumber(ll num); //  O(n)
  || decimalToBinary : TC - logn |  convert to binary ||
 
  ...... COMBANOTORICS................
+|| PreXorSum : TC - o(n )|  pre xor  sum arrey ||
+
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
-long long mod_exp(long long base, long long exp, long long mod)
-{
-    long long result = 1;
-    while (exp > 0)
-    {
-        if (exp % 2 == 1)
-        {
-            result = (result * base) % mod;
-        }
-        base = (base * base) % mod;
-        exp /= 2;
-    }
-    return result;
-}
+
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t=1;
-
+    int t;
+    cin >> t;
     while (t--)
     {
         logic();
@@ -105,37 +93,56 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
+    ll n, m;
 
-    vector<ll> v(n);
-    for (auto& val : v) 
-    {
-        cin >> val;
-    }
-    
-    ll re = 0;
-    for (int i = 0; i < 60; ++i) // Loop through the first 31 bits
-    {
-        ll cnt1 = 0, cnt0 = 0;
+    cin >> n >> m;
 
-        for (int j = 0; j < n; ++j) // Count the 1s and 0s in the ith bit position
+    // Declare a vector of vectors
+    vector<vector<ll>> v(n);
+
+    FOR(i, 0, n)
+    {
+        FOR(j, 0, m)
         {
-            if (v[j] & (1LL << i))
+            ll x;
+            cin >> x;
+
+            v[i].push_back(x);
+        }
+
+        sort(v[i].begin(), v[i].end());
+    }
+
+    map<ll, ll> mp;
+
+    FOR(i, 0, n)
+    {
+        mp[v[i][0]] = i+1;
+    }
+    sort(v.begin(), v.end(), [](const vector<ll> &a, const vector<ll> &b)
+         { return a[0] < b[0]; });
+    ll card = -1;
+    FOR(i, 0, m)
+    {
+        FOR(j, 0, n)
+        {
+            if (card > v[j][i])
             {
-                cnt1++;
+                COUT(-1);
+                return;
             }
             else
             {
-                cnt0++;
+                card = v[j][i];
             }
         }
-
-        ll sum = ((cnt0 * cnt1) % MOD * mod_exp(2, i, MOD)) % MOD;
-
-        re = (re + sum) % MOD;
     }
-    cout << re << endl; 
+
+    AUTO_IT(mp)
+    {
+        cout << val.second << " ";
+    }
+    COUT("");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

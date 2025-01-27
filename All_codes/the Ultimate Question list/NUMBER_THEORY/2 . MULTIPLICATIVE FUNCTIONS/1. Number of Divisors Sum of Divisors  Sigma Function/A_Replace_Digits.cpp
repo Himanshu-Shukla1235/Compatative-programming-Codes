@@ -16,15 +16,11 @@ using namespace std;
 #define maxi INT_MAX
 #define mini INT_MIN
 #define FOR(i, x, n) for (int i = x; i < (n); ++i)
-#define FOR_RE(i, n) for (int i = n - 1; i >= 0; --i)
+#define FOR_RE(i, n, x) for (int i = n - 1; i >= x; --i)
 #define AUTO_IT(X) for (auto &val : X)
-#define VEC(type, name, size) vector<type> name(size)
-#define VEC_PAIR(T1, T2, name, size) vector<pair<T1, T2>> name(size)
-#define VEC_PAIR_NO_SIZE(T1, T2, name) vector<pair<T1, T2>> name
 #define COUT(x) cout << x << "\n"
 #define IS_EVEN(x) ((x) % 2 == 0)
 #define IS_ODD(x) ((x) % 2 != 0)
-#define MOD 1000000007
 
 //*.......................... function declarations ................................>
 
@@ -60,41 +56,35 @@ ll reverseNumber(ll num); //  O(n)
                                                                                                                                                                        //|
  //* _________________some imp useful functions _______________
 
-  ......General...........
+
   || decToBin : TC-logn | SC-logn ||
   || binpow : TC-logn | SC-O(1) ||
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
-  || modExpone
+  || modExp : TC-o(logb) | SC-O(1) || b->power
+||sieveFunction : TC-o(nlognlogn) || simple funtion of the sieve
 
  ......NUM_THEORY.....
   || pollardRhoFunc : TC- (n)^1/4  | for  findint he factos   ||
   || eulerTotientSieve : TC- nlognlogn |  counts the integers from 1 to n that are coprime with n ||
  || decimalToBinary : TC - logn |  convert to binary ||
+||divisorCount1 : TC-logn   || to know the count of divisors ,int includes itself and 1 as well
+||divisorCount2 : TC-root(n)   || to know the count of divisors by trial division method
+divisorSum_1: TC-o(root(n).logn ||to know the count of divisors ,int includes itself and 1 as well
+ divisorSum_1 : TC - o(logn) ||  to know the sum of divisors ,int includes itself and 1 as well
 
  ...... COMBANOTORICS................
+|| PreXorSum : TC - o(n )|  pre xor  sum arrey ||
+
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
-long long mod_exp(long long base, long long exp, long long mod)
-{
-    long long result = 1;
-    while (exp > 0)
-    {
-        if (exp % 2 == 1)
-        {
-            result = (result * base) % mod;
-        }
-        base = (base * base) % mod;
-        exp /= 2;
-    }
-    return result;
-}
+
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t=1;
+    int t = 1;
 
     while (t--)
     {
@@ -105,37 +95,67 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
+    ll n, m;
+    cin >> n >> m;
 
-    vector<ll> v(n);
-    for (auto& val : v) 
+    string s1, s2;
+
+    cin >> s1;
+    cin >> s2;
+
+    map<ll, ll> mp;
+    vector<ll> v1(n);
+    vector<ll> v2(m);
+
+    // Fill `v1` with digits from `s1`
+    FOR(i, 0, n)
     {
-        cin >> val;
+        v1[i] = s1[i] - '0'; // Convert char to digit
     }
-    
-    ll re = 0;
-    for (int i = 0; i < 60; ++i) // Loop through the first 31 bits
-    {
-        ll cnt1 = 0, cnt0 = 0;
 
-        for (int j = 0; j < n; ++j) // Count the 1s and 0s in the ith bit position
+    // Fill `v2` with digits from `s2` and count occurrences in the map
+    FOR(i, 0, m)
+    {
+        ll num = s2[i] - '0'; // Convert char to digit
+        v2[i] = num;
+        mp[num]++;
+    }
+
+    FOR(i, 0, n)
+    {
+        ll sel = v1[i];
+        bool ch = false;
+        FOR(j, 1, 10)
         {
-            if (v[j] & (1LL << i))
+
+            if (mp[j] > 0 && j > v1[i])
             {
-                cnt1++;
-            }
-            else
-            {
-                cnt0++;
+                ch = true;
+                v1[i] = j;
+                sel = j;
             }
         }
-
-        ll sum = ((cnt0 * cnt1) % MOD * mod_exp(2, i, MOD)) % MOD;
-
-        re = (re + sum) % MOD;
+        if (ch)
+        {
+            mp[sel]--;
+        }
     }
-    cout << re << endl; 
+    if (m > n)
+    {
+        FOR_RE(i, m, n)
+        {
+            if (mp[v2[i]] > 0)
+            {
+                v1[n - 1] = v2[i];
+                break;
+            }
+        }
+    }
+
+    AUTO_IT(v1)
+    {
+        cout << val;
+    }
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

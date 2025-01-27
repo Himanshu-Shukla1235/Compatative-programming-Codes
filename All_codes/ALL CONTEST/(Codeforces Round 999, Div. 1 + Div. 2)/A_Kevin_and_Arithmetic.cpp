@@ -24,7 +24,6 @@ using namespace std;
 #define COUT(x) cout << x << "\n"
 #define IS_EVEN(x) ((x) % 2 == 0)
 #define IS_ODD(x) ((x) % 2 != 0)
-#define MOD 1000000007
 
 //*.......................... function declarations ................................>
 
@@ -60,12 +59,13 @@ ll reverseNumber(ll num); //  O(n)
                                                                                                                                                                        //|
  //* _________________some imp useful functions _______________
 
-  ......General...........
+
   || decToBin : TC-logn | SC-logn ||
   || binpow : TC-logn | SC-O(1) ||
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
-  || modExpone
+  || modExp : TC-o(logb) | SC-O(1) || b->power
+||sieveFunction : TC-o(nlognlogn) || simple funtion of the sieve
 
  ......NUM_THEORY.....
   || pollardRhoFunc : TC- (n)^1/4  | for  findint he factos   ||
@@ -73,29 +73,18 @@ ll reverseNumber(ll num); //  O(n)
  || decimalToBinary : TC - logn |  convert to binary ||
 
  ...... COMBANOTORICS................
+|| PreXorSum : TC - o(n )|  pre xor  sum arrey ||
+
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
-long long mod_exp(long long base, long long exp, long long mod)
-{
-    long long result = 1;
-    while (exp > 0)
-    {
-        if (exp % 2 == 1)
-        {
-            result = (result * base) % mod;
-        }
-        base = (base * base) % mod;
-        exp /= 2;
-    }
-    return result;
-}
+
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t=1;
-
+    int t;
+    cin >> t;
     while (t--)
     {
         logic();
@@ -107,35 +96,33 @@ void logic()
 {
     ll n;
     cin >> n;
-
+    ll re = 0;
     vector<ll> v(n);
-    for (auto& val : v) 
+    bool ch = false;
+    AUTO_IT(v)
     {
         cin >> val;
-    }
-    
-    ll re = 0;
-    for (int i = 0; i < 60; ++i) // Loop through the first 31 bits
-    {
-        ll cnt1 = 0, cnt0 = 0;
-
-        for (int j = 0; j < n; ++j) // Count the 1s and 0s in the ith bit position
+        if (val % 2 == 0)
         {
-            if (v[j] & (1LL << i))
-            {
-                cnt1++;
-            }
-            else
-            {
-                cnt0++;
-            }
+            ch = true;
         }
-
-        ll sum = ((cnt0 * cnt1) % MOD * mod_exp(2, i, MOD)) % MOD;
-
-        re = (re + sum) % MOD;
+        else
+        {
+            re++;
+        }
     }
-    cout << re << endl; 
+
+    if (ch)
+    {
+        re++;
+    }
+else{
+    re--;
+}
+
+COUT(re);
+
+
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________
