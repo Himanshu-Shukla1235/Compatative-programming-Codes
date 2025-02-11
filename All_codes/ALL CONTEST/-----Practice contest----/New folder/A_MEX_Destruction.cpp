@@ -84,86 +84,52 @@ void logic()
 {
     ll n;
     cin >> n;
+
     vector<ll> v(n);
+    ll cnt = 0;
+    bool ch = false;
     AUTO_IT(v)
     {
         cin >> val;
     }
-    if (n == 1)
+    FOR(i, 0, n )
     {
-        COUT("Yes");
-        return;
-    }
-
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
+        if (v[i] == 0)
         {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
+            v[i] = -1;
         }
-        if (num == 0)
+        else
         {
-            ch = true;
             break;
         }
-        if ((v[i] / 10) % 2 == 0)
+    }
+    if (v[n - 1] == -1)
+    {
+        COUT(0);
+        return;
+    }
+    FOR_RE(i, n)
+    {
+
+        if (v[i] == 0)
         {
-            s1.insert(0);
+            v[i] = 1;
         }
         else
         {
-            s1.insert(1);
+            break;
         }
     }
 
-    if (ch)
+    AUTO_IT(v)
     {
-        FOR(i, 0, n)
+        if (val == 0)
         {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
+            COUT(2);
             return;
         }
     }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    COUT(1);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

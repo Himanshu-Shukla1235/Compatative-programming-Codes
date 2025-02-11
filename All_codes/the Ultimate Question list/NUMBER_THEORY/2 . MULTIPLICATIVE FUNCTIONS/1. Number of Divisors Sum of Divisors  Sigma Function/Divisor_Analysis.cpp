@@ -1,84 +1,16 @@
-//*______________________________________________  ||  __________________________________________________
-/*
-                                             >  V I R U P A K S H  <                                                                                                                                                                   //|
-                                                                                                                                                                       //|
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>__           __<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
-
-*/
 #include <bits/stdc++.h>
 using namespace std;
 
-//*.......................... macros ................................>
-
 #define ll long long int
-#define maxi INT_MAX
-#define mini INT_MIN
-#define FOR(i, x, n) for (int i = x; i < (n); ++i)
-#define FOR_RE(i, n) for (int i = n - 1; i >= 0; --i)
-#define AUTO_IT(X) for (auto &val : X)
-#define COUT(x) cout << x << "\n"
-#define IS_EVEN(x) ((x) % 2 == 0)
-#define IS_ODD(x) ((x) % 2 != 0)
-#define MOD 10000000007LL
 
-//*.......................... function declarations ................................>
+#define MOD 1000000007
 
-void logic(); // Time complexity depends on implementation details
-void logic2();
-void logic3();
-
-ll factorial(ll n); // O(n)
-
-ll power(ll base, ll exp); // O(log exp)
-
-vector<ll> sieve(ll max_n); // O(max_n log log max_n)
-
-ll maxSumSubarray(const vector<ll> &arr); // O(n)
-
-vector<ll> getFactors(ll n); // O(sqrt(n))
-
-ll gcd(ll a, ll b); // O(log(min(a, b)))
-
-ll lcm(ll a, ll b); // O(log(min(a, b)))
-
-ll reverseNumber(ll num); //  O(n)
-
-//*..................................................................................>
-/*
-
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
- //* _________________some imp useful functions _______________
-
-
-  || decToBin : TC-logn | SC-logn ||
-  || binpow : TC-logn | SC-O(1) ||
-  || fastfib : TC-logn | SC-O(1) ||
-  || nCr : TC-o(r) | SC-O(1) ||
-  || modExp : TC-o(logb) | SC-O(1) || b->power
-||sieveFunction : TC-o(nlognlogn) || simple funtion of the sieve
-
- ......NUM_THEORY.....
-  || pollardRhoFunc : TC- (n)^1/4  | for  findint he factos   ||
-  || eulerTotientSieve : TC- nlognlogn |  counts the integers from 1 to n that are coprime with n ||
- || decimalToBinary : TC - logn |  convert to binary ||
-||divisorCount1 : TC-logn   || to know the count of divisors ,int includes itself and 1 as well
-||divisorCount2 : TC-root(n)   || to know the count of divisors by trial division method
-divisorSum_1: TC-o(root(n).logn ||to know the count of divisors ,int includes itself and 1 as well
- divisorSum_1 : TC - o(logn) ||  to know the sum of divisors ,int includes itself and 1 as well
-
- ...... COMBANOTORICS................
-|| PreXorSum : TC - o(n )|  pre xor  sum arrey ||
-
-*/
 //!________________________________ The search for meaning often leads to ! _______________________________
+
+void logic();
+
+// Function to compute modular exponentiation (base^exp % mod)
 long long mod_exp(long long base, long long exp, long long mod)
 {
     long long result = 1;
@@ -93,43 +25,68 @@ long long mod_exp(long long base, long long exp, long long mod)
     }
     return result;
 }
+
+// Function to compute modular inverse using Fermat's Little Theorem
+long long mod_inverse(long long a, long long mod)
+{
+    return mod_exp(a, mod - 2, mod); // Fermat's Little Theorem: a^(mod-2) % mod is the inverse of a mod mod
+}
+
+// Count of divisors function (number of divisors of a number based on its prime factorization)
 ll countD(vector<pair<ll, ll>> vp)
 {
     ll re = 1;
-
-    FOR(i, 0, vp.size())
+    for (auto &val : vp)
     {
-        re *= ((vp[i].second + 1) % MOD);
+        re *= (val.second + 1) % MOD;
+        re %= MOD; // Take modulo at each step
     }
     return re;
 }
+
+// Sum of divisors function (sum of divisors of a number based on its prime factorization)
 ll sumD(vector<pair<ll, ll>> vp)
 {
-
     ll re = 1;
 
-    FOR(i, 0, vp.size())
+    for (auto &val : vp)
     {
-        ll fact = vp[i].first;
-        ll cnt = vp[i].second;
+        ll fact = val.first;
+        ll cnt = val.second;
 
-        re *= ((mod_exp(fact, cnt + 1, MOD) - 1) / ((fact - 1)) % MOD) % MOD;
+        // Formula for sum of divisors: (1 + p + p^2 + ... + p^cnt) = (p^(cnt+1) - 1) / (p - 1)
+        ll term = (mod_exp(fact, cnt + 1, MOD) - 1 + MOD) % MOD;
+        ll inv = mod_inverse(fact - 1, MOD); // Inverse of (p-1)
+
+        // Multiply the result by the current term
+        re = (re * term % MOD) * inv % MOD;
     }
+
     return re;
 }
-ll proD(vector<pair<ll, ll>> vp)
+
+// Product of divisors function (product of divisors of a number based on its prime factorization)
+ll proD(vector<pair<ll, ll>> vp, ll re1)
 {
-    ll re = 1;
+    ll div_prod = 1;
+    ll div_cnt2 = 1;
 
-    FOR(i, 0, vp.size())
+    for (auto &val : vp)
     {
-        ll fact = vp[i].first;
-        ll cnt = vp[i].second+1;
-        ll sumPow = ((cnt * (cnt + 1)) % MOD) / 2;
-        re *= (mod_exp(fact, sumPow, MOD)) % MOD;
+        ll fact = val.first;
+        ll cnt = val.second;
+
+        // Formula for product of divisors: p^(1+2+...+cnt)
+        div_prod = mod_exp(div_prod, cnt + 1, MOD) *
+                   mod_exp(mod_exp(fact, (cnt * (cnt + 1) / 2), MOD), div_cnt2, MOD) % MOD;
+
+        // Update the count modulo (MOD-1) since we use it in exponentiation
+        div_cnt2 = (div_cnt2 * (cnt + 1)) % (MOD - 1);
     }
-    return re;
+
+    return div_prod;
 }
+
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -167,9 +124,9 @@ void logic()
     ll re2 = sumD(vp);
     // product
 
-    ll re3 = proD(vp);
+    ll re3 = proD(vp, re1);
 
-    COUT(re1 << " " << re2 << " " << re3);
+    cout << re1 << " " << re2 << " " << re3 << endl;
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________
@@ -192,128 +149,6 @@ void logic()
                                                                                                                                                                        //|
 */
 //*________________________________ function codes ___________________________________________ >
-
-// 1.....................factorial function............................
-
-ll factorial(ll n)
-{
-    if (n <= 1)
-        return 1;
-    return n * factorial(n - 1);
-}
-
-// 2..........................power function.......................................
-ll power(ll base, ll exp)
-{
-    if (exp == 0)
-        return 1;
-    if (exp % 2 == 0)
-    {
-        ll half = power(base, exp / 2);
-        return half * half;
-    }
-    else
-    {
-        return base * power(base, exp - 1);
-    }
-}
-// 3..........................function to get factors.......................................
-vector<ll> getFactors(ll n)
-{
-    vector<ll> factors;
-    for (ll i = 1; i * i <= n; ++i)
-    {
-        if (n % i == 0)
-        {
-            factors.push_back(i);
-            if (i != n / i)
-            { // To avoid adding the square root twice
-                factors.push_back(n / i);
-            }
-        }
-    }
-    sort(factors.begin(), factors.end()); // Optional: sort factors for ordered output
-    return factors;
-}
-//        4..........................Sieve of Eratosthenes function.......................................
-vector<ll> sieve(ll max_n)
-{
-    vector<bool> is_prime(max_n + 1, true);
-    vector<ll> primes;
-    is_prime[0] = is_prime[1] = false;
-    for (ll i = 2; i <= max_n; ++i)
-    {
-        if (is_prime[i])
-        {
-            primes.push_back(i);
-            for (ll j = i * i; j <= max_n; j += i)
-            {
-                is_prime[j] = false;
-            }
-        }
-    }
-    return primes;
-}
-//          5..........................Max Sum Subarray (Kadane's Algorithm).......................................
-ll maxSumSubarray(const vector<ll> &arr)
-{
-    ll max_sum = arr[0];
-    ll current_sum = arr[0];
-    for (size_t i = 1; i < arr.size(); ++i)
-    {
-        current_sum = max(arr[i], current_sum + arr[i]);
-        max_sum = max(max_sum, current_sum);
-    }
-    return max_sum;
-}
-// 6..........................function to find GCD...........................................
-ll gcd(ll a, ll b)
-{
-    while (b != 0)
-    {
-        ll temp = b;
-        b = a % b;
-        a = temp;
-    }
-    return a;
-}
-
-// 7..........................function to find LCM...........................................
-ll lcm(ll a, ll b)
-{
-    return (a / gcd(a, b)) * b; // LCM formula
-}
-
-// 8..........................function to find Reverse...........................................
-ll reverseNumber(ll num)
-{
-    ll reversed = 0;
-    while (num > 0)
-    {
-        reversed = reversed * 10 + num % 10;
-        num /= 10;
-    }
-    return reversed;
-}
-
-/*
-                                                                                                                                                                               //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-                                                                                                                                                                       //|
-*/
 //*____________________________ Insights____________________________________________________________
 
 // failure: no failure!  ....

@@ -46,7 +46,6 @@ void logic3();
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
   || modExp : TC-o(logb) | SC-O(1) || b->power
-  || modinv : TC-o(logm) | where mis the mod value.
   || mygcd : TC-o(log(max(a,b)) |     ||
   || mylcm : you can fynd by the use of the mygcd
 
@@ -65,14 +64,35 @@ void logic3();
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
+ll ind(ll x, vector<ll>&v)
+{
+    ll n = v.size();
+    ll l = 0, r = n - 1;
+    ll re = -1; 
+    while (l <= r)
+    {
+        ll mid = l + ((r - l) / 2);
+
+        if (v[mid] >= x)
+        {
+            re = mid;    
+            r = mid - 1;
+        }
+        else
+        {
+            l = mid + 1;
+        }
+    }
+    return re;
+}
 
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
+    int t=1;
+
     while (t--)
     {
         logic();
@@ -84,85 +104,36 @@ void logic()
 {
     ll n;
     cin >> n;
+
     vector<ll> v(n);
     AUTO_IT(v)
     {
         cin >> val;
     }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
+    ll q;
+    cin >> q;
+    vector<ll> que(q);
+
+    AUTO_IT(que)
+    {
+        cin >> val;
+        // cout << val << " ";
+    }
     ll sum = 0;
-    bool ch = false;
+
+    vector<ll> v2(n);
     FOR(i, 0, n)
     {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
+        sum += v[i];
+        v2[i] = sum;
     }
 
-    if (ch)
+    FOR(i, 0, q)
     {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
-    }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
+        ll index = ind(que[i], v2);
+        ll re = index+1;
+        COUT(re);
     }
 }
 

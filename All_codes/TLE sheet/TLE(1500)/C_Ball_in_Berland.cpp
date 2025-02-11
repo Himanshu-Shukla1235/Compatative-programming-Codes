@@ -82,88 +82,64 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
+    ll a, b, k;
+    cin >> a >> b >> k;
+
+    vector<ll> by(k);
+    vector<ll> gl(k);
+
+    AUTO_IT(by)
     {
         cin >> val;
     }
-    if (n == 1)
+    AUTO_IT(gl)
     {
-        COUT("Yes");
-        return;
+        cin >> val;
     }
+    // unordered_map<ll,set<ll>>mp;
+    map<ll, ll> mp;
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
+    vector<ll> presum(a);
+    vector<set<ll>> ab(a + 1);
+    FOR(i, 0, k)
     {
-        ll num = v[i] % 10;
 
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
+        ab[by[i]].insert(gl[i]);
     }
-
-    if (ch)
+    presum[a - 1] = ab[a].size();
+    FOR_RE(i, a - 1)
     {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
+        presum[i] = presum[i + 1] + ab[i + 1].size();
+    }
+    // AUTO_IT(presum)
+    // {
+    //     cout << val << " ";
+    // }
+    ll re = 0;
+    FOR(i, 1, a)
+    {
+        re += (presum[i] * ab[i].size());
 
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
+        AUTO_IT(ab[i])
         {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
+            mp[val]++;
         }
     }
 
-    if (s1.size() == 1)
+    AUTO_IT(ab[a ])
     {
-        COUT("Yes");
-        return;
+        mp[val]++;
     }
-    else
+    FOR(i, 1, b + 1)
     {
-        COUT("No");
-        return;
+        if (mp[i] > 0)
+        {
+            ll num = mp[i] - 1;
+            re -= ((num * (num + 1)) / 2);
+        }
     }
+
+    COUT(re);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

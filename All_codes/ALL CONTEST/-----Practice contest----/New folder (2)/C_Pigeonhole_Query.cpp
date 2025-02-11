@@ -71,8 +71,8 @@ int main()
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
+    int t = 1;
+
     while (t--)
     {
         logic();
@@ -82,87 +82,49 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
+    ll n, q;
+
+    cin >> n >> q;
+
+    vector<ll> v(n + 2, 1);
+
+    ll cnt = 0;
+    map<ll, ll> mp;
+
+    FOR(i, 0, n + 1)
     {
-        cin >> val;
+        mp[i] = 0;
     }
-    if (n == 1)
+    FOR(i, 0, q)
     {
-        COUT("Yes");
-        return;
-    }
+        ll t;
+        cin >> t;
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
+        if (t == 1)
+        {
+            ll a, b;
+            cin >> a >> b;
 
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
-    }
+            v[mp[a]]--;
 
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
+            v[b]++;
+            cout << v[mp[a]] << " " << v[b] << "   ";
 
-            while (num != 0)
+            if (v[b] == 2)
             {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
+                cnt++;
             }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
+            if (v[mp[a]] == 1)
+            {
+                cnt--;
+            }
+            mp[a] = b;
         }
         else
         {
-            COUT("No");
-            return;
-        }
-    }
 
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
+            COUT(cnt);
+        }
     }
 }
 

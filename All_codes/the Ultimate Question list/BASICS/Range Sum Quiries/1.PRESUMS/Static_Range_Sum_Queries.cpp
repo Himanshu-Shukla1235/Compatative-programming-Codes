@@ -1,4 +1,4 @@
-//*______________________________________________  ||  __________________________________________________
+//*______________________________________________ ||  __________________________________________________
 /*
                                              >  V I R U P A K S H  <                                                                                                                                                                   //|
                                                                                                                                                                        //|
@@ -46,7 +46,6 @@ void logic3();
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
   || modExp : TC-o(logb) | SC-O(1) || b->power
-  || modinv : TC-o(logm) | where mis the mod value.
   || mygcd : TC-o(log(max(a,b)) |     ||
   || mylcm : you can fynd by the use of the mygcd
 
@@ -71,8 +70,8 @@ int main()
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
+    int t = 1;
+
     while (t--)
     {
         logic();
@@ -82,87 +81,27 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
+    ll n, q;
+    cin >> n >> q;
     vector<ll> v(n);
+    vector<ll> pr;
+    ll sum = 0;
+
     AUTO_IT(v)
     {
         cin >> val;
-    }
-    if (n == 1)
+        sum = sum + val;
+        pr.push_back(sum);
+        }
+    vector<pair<ll, ll>> pa(q);
+    AUTO_IT(pa)
     {
-        COUT("Yes");
-        return;
-    }
-
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
+        cin >> val.first >> val.second;
     }
 
-    if (ch)
+    AUTO_IT(pa)
     {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
-    }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
+        COUT((pr[val.second - 1] - pr[val.first - 1]) + v[val.first - 1]);
     }
 }
 

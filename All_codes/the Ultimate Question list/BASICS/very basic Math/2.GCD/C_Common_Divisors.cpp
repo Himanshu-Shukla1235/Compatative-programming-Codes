@@ -46,19 +46,18 @@ void logic3();
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
   || modExp : TC-o(logb) | SC-O(1) || b->power
-  || modinv : TC-o(logm) | where mis the mod value.
-  || mygcd : TC-o(log(max(a,b)) |     ||
-  || mylcm : you can fynd by the use of the mygcd
+ || mygcd : TC-o(log(max(a,b)) |     ||
+ || mylcm :
 
  ......NUM_THEORY.....
-  ||sieveFunction : TC-o(nlognlogn) || simple funtion of the sieve ||
+||sieveFunction : TC-o(nlognlogn) || simple funtion of the sieve ||
   || pollardRhoFunc : TC- (n)^1/4  | for  findint he factos   ||
   || eulerTotientSieve : TC- nlognlogn |  counts the integers from 1 to n that are coprime with n ||
-  || decimalToBinary : TC - logn |  convert to binary ||
-  ||divisorCount1 : TC-logn   || to know the count of divisors ,int includes itself and 1 as well
-  ||divisorCount2 : TC-root(n)   || to know the count of divisors by trial division method
-  ||divisorSum_1: TC-o(root(n).logn ||to know the count of divisors ,int includes itself and 1 as well
-  ||divisorSum_1 : TC - o(logn) ||  to know the sum of divisors ,int includes itself and 1 as well
+ || decimalToBinary : TC - logn |  convert to binary ||
+||divisorCount1 : TC-logn   || to know the count of divisors ,int includes itself and 1 as well
+||divisorCount2 : TC-root(n)   || to know the count of divisors by trial division method
+divisorSum_1: TC-o(root(n).logn ||to know the count of divisors ,int includes itself and 1 as well
+ divisorSum_1 : TC - o(logn) ||  to know the sum of divisors ,int includes itself and 1 as well
 
  ...... COMBANOTORICS................
 || PreXorSum : TC - o(n )|  pre xor  sum arrey ||
@@ -66,13 +65,37 @@ void logic3();
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
 
+ll gcd(ll a, ll b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+
+set<ll> div(ll a)
+{
+    set<ll> re;
+    for (ll i = 1; i * i <= a; i++)
+    {
+        if (a == 1)
+        {
+            re.insert(1);
+            break;
+        }
+        else if (a % i == 0)
+        {
+            re.insert(i);
+            re.insert(a / i);
+        }
+    }
+    return re;
+}
+
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
+    int t = 1;
+
     while (t--)
     {
         logic();
@@ -84,86 +107,23 @@ void logic()
 {
     ll n;
     cin >> n;
+
     vector<ll> v(n);
+
     AUTO_IT(v)
     {
         cin >> val;
     }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-
     sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
+    ll re = 0;
+    ll mul = v[0];
+    FOR(i, 1, n)
     {
-        ll num = v[i] % 10;
 
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
+        mul = gcd(mul, v[i]);
     }
-
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
-    }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    set<ll> s = div(mul);
+    COUT(s.size());
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

@@ -2,7 +2,7 @@
 /*
                                              >  V I R U P A K S H  <                                                                                                                                                                   //|
                                                                                                                                                                        //|
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>__           __<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>__ ⭐⭐⭐          __<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
@@ -19,7 +19,8 @@ using namespace std;
 #define COUT(x) cout << x << "\n"
 #define IS_EVEN(x) ((x) % 2 == 0)
 #define IS_ODD(x) ((x) % 2 != 0)
-#define MOD 10000000007
+#define MOD 1000000007
+#define INV_2 500000004
 
 //*.......................... function declarations ................................>
 
@@ -46,7 +47,6 @@ void logic3();
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
   || modExp : TC-o(logb) | SC-O(1) || b->power
-  || modinv : TC-o(logm) | where mis the mod value.
   || mygcd : TC-o(log(max(a,b)) |     ||
   || mylcm : you can fynd by the use of the mygcd
 
@@ -65,105 +65,49 @@ void logic3();
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
+ll rangesum(ll a, ll b)
+{
+    ll sum1 = (b % MOD * ((b + 1) % MOD)) % MOD;
+    sum1 = (sum1 * INV_2) % MOD;
+
+    ll sum2 = (((a - 1) % MOD + MOD) % MOD * (a % MOD)) % MOD;
+    sum2 = (sum2 * INV_2) % MOD;
+
+    return (sum1 - sum2 + MOD) % MOD;
+}
 
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
+    int t = 1;
+
     while (t--)
     {
         logic();
     }
     return 0;
 }
-
 void logic()
 {
     ll n;
     cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
+
+    ll re = 0;
+    ll i = 1;
+
+    while (i <= n)
     {
-        cin >> val;
-    }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
+        ll div_part = n / i;
+        ll jump_part = n / div_part;
+
+        re = (re + div_part * rangesum(i, jump_part)) % MOD;
+
+        i = jump_part + 1;
     }
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
-    }
-
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
-    }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    cout << (re) % MOD << "\n"; // Print result
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

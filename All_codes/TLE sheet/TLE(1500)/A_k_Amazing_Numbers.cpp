@@ -65,6 +65,79 @@ void logic3();
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
+bool bs(vector<ll> &maxGaps, ll num, ll mid) {
+    return maxGaps[num] >= mid;
+}
+
+void logic() {
+    ll n;
+    cin >> n;
+    vector<ll> v(n);
+    
+    for (ll &val : v) {
+        cin >> val;
+    }
+
+    vector<ll> ans(n, -1);
+    unordered_map<ll, vector<ll>> positions;  // Store positions of each number
+
+    // Step 1: Store positions of each number
+    FOR(i, 0, n) {
+        positions[v[i]].push_back(i);
+    }
+
+    // Step 2: Compute max gap for each number
+    vector<ll> maxGaps(n + 1, 0);
+    
+    for (auto &p : positions) {
+        ll num = p.first;
+        auto &indices = p.second;
+
+        ll maxGap = indices[0] + 1;  // First gap (start of array)
+        
+        for (ll i = 1; i < indices.size(); i++) {
+            maxGap = max(maxGap, indices[i] - indices[i - 1]);
+        }
+
+        maxGap = max(maxGap, n - indices.back());  // Last gap (end of array)
+        maxGaps[num] = maxGap;
+    }
+
+    // Step 3: Perform the modified binary search
+    for (ll i = n; i >= 1; i--) {
+        ll push = -1, l = 0, r = n;
+
+        while (l <= r) {
+            ll mid = l + ((r - l) / 2);
+            if (bs(maxGaps, i, mid)) {
+                push = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+
+        if (push != -1 && push != 0) {
+            ans[push - 1] = i;
+        }
+    }
+
+    // Step 4: Fill in missing values in ans[]
+    ll num = -1;
+    FOR(i, 0, n) {
+        if (ans[i] != -1) {
+            num = (num == -1) ? ans[i] : min(num, ans[i]);
+        }
+        ans[i] = num;
+    }
+
+    // Print final result
+    for (ll val : ans) {
+        cout << val << " ";
+    }
+    COUT("");
+}
+
 
 int main()
 {
@@ -80,91 +153,77 @@ int main()
     return 0;
 }
 
-void logic()
-{
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
-    {
-        cin >> val;
-    }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
+// void logic()
+// {
+//     ll n;
+//     cin >> n;
 
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
-    }
+//     vector<ll> v(n);
+//     AUTO_IT(v)
+//     {
+//         cin >> val;
+//     }
 
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
+//     vector<ll> ans(n, -1);
+//     //  map<ll, ll> mp; // debug
+  
 
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
-    }
+//     for (ll i = n; i >= 1; i--)
+//     {
+//         ll push = -1;
+//         ll l = 0, r = n;
+//         while (l <= r)
+//         {
+//             ll mid = l + ((r - l) / 2);
 
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
-}
+//             bool ch = bs(v, i, mid);
+
+//             if (ch)
+//             {
+
+//                 push = mid;
+//                 l = mid + 1;
+//             }
+//             else
+//             {
+//                 r = mid - 1;
+//             }
+//         }
+//         // mp[i] = push;  // debug
+//         if (push != -1 && push != 0)
+//         {
+//             ans[push - 1] = i;
+//         }
+//     }
+//     //------------------------------------------debug
+//     // for (const auto &pair : mp)
+//     // {
+//     //     cout << pair.first << " -> " << pair.second << endl;
+//     // }
+//     //-------------------------------------------------
+//     ll num = -1;
+//     FOR(i, 0, n)
+//     {
+
+//         if (ans[i] != -1)
+//         {
+//             if (num == -1)
+//             {
+//                 num = ans[i];
+//             }
+//             num = min(num, ans[i]);
+//         }
+
+//         ans[i] = num;
+//     }
+
+//     AUTO_IT(ans)
+//     {
+//         cout << val << " ";
+//     }
+//     COUT("");
+// }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________
 /*

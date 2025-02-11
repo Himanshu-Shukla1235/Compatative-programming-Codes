@@ -46,7 +46,6 @@ void logic3();
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
   || modExp : TC-o(logb) | SC-O(1) || b->power
-  || modinv : TC-o(logm) | where mis the mod value.
   || mygcd : TC-o(log(max(a,b)) |     ||
   || mylcm : you can fynd by the use of the mygcd
 
@@ -66,6 +65,17 @@ void logic3();
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
 
+ll gcd(ll a, ll b)
+{
+
+    while (b != 0)
+    {
+        ll temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -84,86 +94,51 @@ void logic()
 {
     ll n;
     cin >> n;
+
     vector<ll> v(n);
+
     AUTO_IT(v)
     {
         cin >> val;
     }
     if (n == 1)
     {
-        COUT("Yes");
-        return;
-    }
-
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
+        if (v[0] == 1)
         {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
-    }
-
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
+            COUT(0);
             return;
         }
-        else
+
+        COUT(1);
+        return;
+    }
+    ll gcd0 = v[0];
+    FOR(i, 1, n )
+    {
+        if (gcd(gcd0, v[i]) == 1)
         {
-            COUT("No");
+            COUT(0);
             return;
         }
+        gcd0 = gcd(gcd0, v[i]);
     }
+    ll gcd1 = gcd(v[n - 1], n);
+    ll gcd2 = gcd(v[n - 2], n - 1);
+    ll re = 0;
 
-    if (s1.size() == 1)
+    if (gcd(gcd1, v[n - 2]) == 1 || gcd(gcd1, gcd0) == 1)
     {
-        COUT("Yes");
-        return;
+        re = 1;
+    }
+    else if (gcd(gcd2, v[n - 1]) == 1 || gcd(gcd2, gcd0) == 1)
+    {
+        re = 2;
     }
     else
     {
-        COUT("No");
-        return;
+        re = 3;
     }
+    COUT(re);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

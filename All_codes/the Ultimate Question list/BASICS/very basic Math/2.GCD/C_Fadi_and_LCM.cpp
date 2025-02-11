@@ -46,7 +46,6 @@ void logic3();
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
   || modExp : TC-o(logb) | SC-O(1) || b->power
-  || modinv : TC-o(logm) | where mis the mod value.
   || mygcd : TC-o(log(max(a,b)) |     ||
   || mylcm : you can fynd by the use of the mygcd
 
@@ -65,14 +64,27 @@ void logic3();
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
-
+long long gcd(long long a, long long b)
+{
+    while (b != 0)
+    {
+        long long temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+ll lcm(ll a, ll b)
+{
+    return (a / gcd(a, b)) * b;
+}
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
+    int t = 1;
+
     while (t--)
     {
         logic();
@@ -84,86 +96,15 @@ void logic()
 {
     ll n;
     cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
+    pair<ll, ll> p = make_pair(LLONG_MAX, LLONG_MAX);
+    for (ll i = 1; i * i <= n; i++)
     {
-        cin >> val;
-    }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
+        if (max(i, n / i) < max(p.first, p.second) && n % i == 0 && lcm(i, n / i) == n)
         {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
+            p = make_pair(i, n / i);
         }
     }
-
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
-    }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    COUT(p.first << " " << p.second);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

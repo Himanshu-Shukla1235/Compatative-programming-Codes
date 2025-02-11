@@ -82,88 +82,77 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
-    {
-        cin >> val;
-    }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
+    ll n, k;
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
+    cin >> n >> k;
+
+    string s;
+    cin >> s;
+
+    //---------------------
+    ll j = k;
     FOR(i, 0, n)
     {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
+        if (j >= n)
         {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
             break;
         }
-        if ((v[i] / 10) % 2 == 0)
+
+        if (s[i] == '?' && s[j] != '?')
         {
-            s1.insert(0);
+
+            s[i] = s[j];
         }
-        else
+        else if (s[i] != '?' && s[j] == '?')
         {
-            s1.insert(1);
+            s[j] = s[i];
         }
+        else if (s[i] != s[j])
+        {
+            COUT("NO");
+            return;
+        }
+
+        j++;
     }
 
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
+    // -----------debug
+    // cout << s << " ";
+    // AUTO_IT(pre)
+    // {
+    //     cout << val.first << "," << val.second << " ";
+    // }
+    //-------------------------
 
-            while (num != 0)
+    for (ll i = 0; i < s.size(); i += k)
+    {
+        ll curCnt0 = 0;
+        ll curCnt1 = 0;
+        FOR(j, i, i + k)
+        {
+            if (j >= n)
             {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
+                break;
             }
-            s.insert(v[i]);
+
+            // cout << j << " " << " ";
+            if (s[j] == '1')
+            {
+                curCnt1++;
+            }
+            else if (s[j] == '0')
+            {
+                curCnt0++;
+            }
         }
-        if (s.size() == 1)
+        if (curCnt0 > k / 2 || curCnt1 > k / 2)
         {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
+            COUT("NO");
             return;
         }
     }
 
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    COUT("YES");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

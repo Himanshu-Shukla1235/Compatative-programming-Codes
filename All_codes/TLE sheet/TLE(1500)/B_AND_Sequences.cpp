@@ -19,7 +19,7 @@ using namespace std;
 #define COUT(x) cout << x << "\n"
 #define IS_EVEN(x) ((x) % 2 == 0)
 #define IS_ODD(x) ((x) % 2 != 0)
-#define MOD 10000000007
+#define MOD 1000000007
 
 //*.......................... function declarations ................................>
 
@@ -65,7 +65,15 @@ void logic3();
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
-
+ll factorial(ll n)
+{
+    ll result = 1;
+    for (ll i = 2; i <= n; i++)
+    {
+        result = (result * i) % MOD;
+    }
+    return result;
+}
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -85,85 +93,33 @@ void logic()
     ll n;
     cin >> n;
     vector<ll> v(n);
+    ll minel = LLONG_MAX;
+    map<ll, ll> mp;
     AUTO_IT(v)
     {
         cin >> val;
+        minel = min(minel, val);
+        mp[val]++;
     }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-
     sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
+    if (mp[minel] < 2)
     {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
+        COUT(0);
+        return;
     }
 
-    if (ch)
+    FOR(i, 2, n)
     {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
 
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
+        if ((v[i] & minel) != minel)
         {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
+            COUT(0);
             return;
         }
     }
+    ll re = (factorial(n - 2) % MOD * (mp[minel] % MOD * (mp[minel] - 1) % MOD) % MOD) % MOD;
 
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    COUT(re);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

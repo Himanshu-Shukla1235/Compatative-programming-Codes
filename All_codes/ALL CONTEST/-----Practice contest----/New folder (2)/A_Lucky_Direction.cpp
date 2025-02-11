@@ -71,8 +71,8 @@ int main()
     ios::sync_with_stdio(false); // Disable synchronization
     cin.tie(nullptr);            // Untie cin from cout
 
-    int t;
-    cin >> t;
+    int t=1;
+
     while (t--)
     {
         logic();
@@ -82,88 +82,22 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
-    {
-        cin >> val;
-    }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
+    string s;
+    cin >> s;
+    map<char, char> mp;
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
+    mp['N'] = 'S';
+    mp['S'] = 'N';
+    mp['E'] = 'W';
+    mp['W'] = 'E';
 
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
-    }
+    string re = "";
 
-    if (ch)
+    FOR(i, 0, s.size())
     {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
+        re += mp[s[i]];
     }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    COUT(re);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

@@ -1,36 +1,66 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define ll long long
-#define FOR(i, n) for (ll i = 0; i < n; i++)
 
-void logic() {
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    set<ll> s;
-    map<ll, ll> mp;
+class Solution
+{
 
-    // Input the vector values
-    for (ll &val : v) {
-        cin >> val;
-    }
+    void bfs(vector<vector<char>> &grid, int xnode, int ynode, vector<vector<int>> &vis)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
 
-    // Process each element of the vector
-    FOR(i, n) {
-        ll temp = v[i];
-        FOR(j, 10) {  // Use different index 'j' to avoid conflict
-            mp[temp + (temp % 10)]++;  // Increment the count in the map
-            temp = temp + (temp % 10); // Update the value of temp
+        queue<pair<int, int>> q;
+        q.push({xnode, ynode});
+        vis[xnode][ynode] = 1;
+
+        while (!q.empty())
+        {
+            int row = q.front().first;
+            int col = q.front().second;
+            q.pop();
+
+            for (int delr = -1; delr <= 1; delr++)
+            {
+                for (int delc = -1; delc <= 1; delc++)
+                {
+                    int newRow = row + delr;
+                    int newCol = col + delc;
+
+                    // Corrected bounds check to prevent accessing out-of-bounds indices
+                    if (newRow >= 0 && newRow < n && newCol >= 0 && newCol < m &&
+                        grid[newRow][newCol] == '1' && vis[newRow][newCol] == 0 && delc != delr)
+                    {
+
+                        vis[newRow][newCol] = 1;
+                        q.push({newRow, newCol});
+                    }
+                }
+            }
         }
     }
 
-    // Iterate over the map and print the key-value pairs
-    for (const auto& [key, value] : mp) {
-        cout << "Key: " << key << ", Value: " << value << endl;
-    }
-}
+public:
+    int numIslands(vector<vector<char>> &grid)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
 
-int main() {
-    logic();
-    return 0;
-}
+        vector<vector<int>> vis(n, vector<int>(m, 0)); // Fixed vis declaration
+
+        int res = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (grid[i][j] == '1' && vis[i][j] == 0)
+                {
+                    res++;
+                    bfs(grid, i, j, vis);
+                }
+            }
+        }
+
+        return res;
+    }
+};

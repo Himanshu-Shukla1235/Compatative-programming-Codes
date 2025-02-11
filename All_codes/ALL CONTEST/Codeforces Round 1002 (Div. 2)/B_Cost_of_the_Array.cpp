@@ -82,88 +82,49 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
+    ll n, k;
+    cin >> n >> k;
+
     vector<ll> v(n);
-    AUTO_IT(v)
+    for (ll &val : v)
     {
         cin >> val;
     }
-    if (n == 1)
+
+    ll indi = 1;
+
+    ll diff = (n / k) - 1;
+
+    if (n % k != 0)
     {
-        COUT("Yes");
-        return;
+        diff = diff + 1;
     }
-
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
+    // cout << diff << ",";
+    FOR(i, 1, diff + 2)
     {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
+        if (v[i] != 1)
         {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
+            COUT(1);
+            return;
         }
     }
-
-    if (ch)
+    // cout << diff << " ";
+    for (ll i = 3; i < n; i += 2)
     {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
+        indi++;
+        // cout << indi << " ";
+        for (ll j = i - (diff); j <=i + diff; j++)
+        { 
+            if (v[j] != indi && j > 0)
             {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
+
+                COUT(indi);
+                return;
             }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
         }
     }
 
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    cout << indi + 1 << endl;
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

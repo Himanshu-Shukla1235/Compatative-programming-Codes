@@ -46,7 +46,6 @@ void logic3();
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
   || modExp : TC-o(logb) | SC-O(1) || b->power
-  || modinv : TC-o(logm) | where mis the mod value.
   || mygcd : TC-o(log(max(a,b)) |     ||
   || mylcm : you can fynd by the use of the mygcd
 
@@ -65,7 +64,21 @@ void logic3();
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
+vector<ll> sieve()
+{
+    ll n = 1e6;
+    vector<ll> v(n + 1, 1);
+    v[0] = v[1] = 0;
+    for (ll i = 2; i <= n + 1; i++)
+    {
 
+        for (ll j = i * 2; j <= n + 1; j += i)
+        {
+            v[j] += i;
+        }
+    }
+    return v;
+}
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -79,90 +92,23 @@ int main()
     }
     return 0;
 }
-
+vector<ll> sums = sieve();
 void logic()
 {
     ll n;
     cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
+
+    if (sums[n] > n)
     {
-        cin >> val;
+        COUT("abundant");
     }
-    if (n == 1)
+    else if (sums[n] == n)
     {
-        COUT("Yes");
-        return;
-    }
-
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
-
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
-    }
-
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
-    }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
+        COUT("perfect");
     }
     else
     {
-        COUT("No");
-        return;
+        COUT("deficient");
     }
 }
 

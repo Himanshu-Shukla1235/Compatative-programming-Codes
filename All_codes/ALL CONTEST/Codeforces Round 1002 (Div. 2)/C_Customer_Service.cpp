@@ -65,7 +65,17 @@ void logic3();
 
 */
 //!________________________________ The search for meaning often leads to ! _______________________________
-
+// void printMatrix(const vector<vector<ll>> &mat)
+// {
+//     for (const auto &row : mat)
+//     {
+//         for (ll val : row)
+//         {
+//             cout << val << " ";
+//         }
+//         cout << "\n";
+//     }
+// }
 int main()
 {
     ios::sync_with_stdio(false); // Disable synchronization
@@ -84,86 +94,65 @@ void logic()
 {
     ll n;
     cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
-    {
-        cin >> val;
-    }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
+    vector<vector<ll>> v(n, vector<ll>(n));
+
+    vector<vector<ll>> pre(n, vector<ll>(n, 0));
+
+   
+
     FOR(i, 0, n)
     {
-        ll num = v[i] % 10;
 
-        while (num != 2 && num != 0)
+        FOR_RE(j, n)
         {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
+
+            cin >> v[i][j];
         }
     }
 
-    if (ch)
+    FOR(i, 0, n)
     {
-        FOR(i, 0, n)
+        ll sum = 0;
+        FOR(j, 1, n)
         {
-            ll num = v[i] % 10;
+            sum += v[i][j - 1];
+            pre[i][j] = sum;
+        }
+    }
+    // printMatrix(pre);
+    ll ch = 0;
+    vector<ll> v2;
 
-            while (num != 0)
+    FOR(i, 0, n)
+    {
+        ll cnt = -1;
+        FOR(j, 0, n)
+        {
+            if (pre[i][j] == j)
             {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
+                cnt++;
             }
-            s.insert(v[i]);
+            else
+            {
+
+                break;
+            }
         }
-        if (s.size() == 1)
+        v2.push_back(cnt);
+    }
+    sort(v2.begin(), v2.end());
+
+    FOR(i, 0, v2.size())
+    {
+        // cout << v2[i] << " ";
+        if (v2[i] >= ch)
         {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
+            ch++;
         }
     }
 
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    COUT(ch);
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

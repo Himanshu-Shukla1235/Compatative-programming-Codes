@@ -85,85 +85,47 @@ void logic()
     ll n;
     cin >> n;
     vector<ll> v(n);
+    ll totalxor = 0;
     AUTO_IT(v)
     {
         cin >> val;
+        totalxor = totalxor ^ val;
     }
-    if (n == 1)
+    vector<ll> prexor(n);
+    prexor[0] = v[0];
+    FOR(i, 1, n)
     {
-        COUT("Yes");
-        return;
+        prexor[i] = prexor[i - 1] ^ v[i];
     }
-
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
+    FOR(i, 0, n - 1)
     {
-        ll num = v[i] % 10;
+        ll toxor = totalxor ^ prexor[i];
 
-        while (num != 2 && num != 0)
+        if (toxor == prexor[i])
         {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
+            COUT("YES");
+            return;
         }
     }
-
-    if (ch)
+ ll first_xor = 0;
+    for (ll i = 0; i < n - 2; i++)
     {
-        FOR(i, 0, n)
+        first_xor ^= v[i];
+        ll second_xor = 0;
+        for (ll j = i + 1; j < n - 1; j++)
         {
-            ll num = v[i] % 10;
+            second_xor ^= v[j];
+            ll third_xor = totalxor ^ first_xor ^ second_xor;
 
-            while (num != 0)
+            if (first_xor == second_xor && second_xor == third_xor)
             {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
+                cout << "YES" << endl;
+                return;
             }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
         }
     }
 
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    COUT(" NO ");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

@@ -82,88 +82,40 @@ int main()
 
 void logic()
 {
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    AUTO_IT(v)
-    {
-        cin >> val;
-    }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
+    ll s, t;
 
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
-    FOR(i, 0, n)
-    {
-        ll num = v[i] % 10;
+    cin >> s >> t;
 
-        while (num != 2 && num != 0)
+    vector<string> S(s);
+    vector<string> T(t);
+
+    AUTO_IT(S)
+    {
+        FOR(i, 0, s)
         {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
+            char c;
+            cin >> c;
+            val.push_back(c);
         }
-        if (num == 0)
+    }
+       AUTO_IT(T)
+    {
+        FOR(i, 0, t)
         {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
+            char c;
+            cin >> c;
+            val.push_back(c);
         }
     }
 
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
 
-            while (num != 0)
-            {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
-                {
-                    COUT("No");
-                    return;
-                }
-            }
-            s.insert(v[i]);
-        }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
+ FOR(i,0,s){
+    
+    FOR(j,0,s){
+       
+        
     }
-
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-    else
-    {
-        COUT("No");
-        return;
-    }
+ }
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________

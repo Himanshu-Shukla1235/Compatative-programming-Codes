@@ -46,7 +46,6 @@ void logic3();
   || fastfib : TC-logn | SC-O(1) ||
   || nCr : TC-o(r) | SC-O(1) ||
   || modExp : TC-o(logb) | SC-O(1) || b->power
-  || modinv : TC-o(logm) | where mis the mod value.
   || mygcd : TC-o(log(max(a,b)) |     ||
   || mylcm : you can fynd by the use of the mygcd
 
@@ -84,86 +83,49 @@ void logic()
 {
     ll n;
     cin >> n;
+
     vector<ll> v(n);
+
     AUTO_IT(v)
     {
         cin >> val;
     }
-    if (n == 1)
-    {
-        COUT("Yes");
-        return;
-    }
-
-    sort(v.begin(), v.end());
-    set<ll> s1;
-    set<ll> s;
-    ll sum = 0;
-    bool ch = false;
+    ll re = 0;
     FOR(i, 0, n)
     {
-        ll num = v[i] % 10;
+        ll cnt = 1;
+        ll jump = i + 1;
+        cout << jump << " ";
+        while (jump < n)
+        {
 
-        while (num != 2 && num != 0)
-        {
-            v[i] += v[i] % 10;
-            num = v[i] % 10;
-        }
-        if (num == 0)
-        {
-            ch = true;
-            break;
-        }
-        if ((v[i] / 10) % 2 == 0)
-        {
-            s1.insert(0);
-        }
-        else
-        {
-            s1.insert(1);
-        }
-    }
-
-    if (ch)
-    {
-        FOR(i, 0, n)
-        {
-            ll num = v[i] % 10;
-
-            while (num != 0)
+            for (ll j = 2; j <= n; j++)
             {
-                v[i] += v[i] % 10;
-                num = v[i] % 10;
-                if (num != 0)
+                ll temp = jump;
+
+                jump = jump * j;
+                if (jump > n)
                 {
-                    COUT("No");
-                    return;
+                    break;
+                }
+
+                if (v[jump - 1] > v[temp - 1])
+                {
+                    cout << jump << " ";
+                    cnt++;
+                    break;
+                }
+                else
+                {
+                    jump = temp;
                 }
             }
-            s.insert(v[i]);
         }
-        if (s.size() == 1)
-        {
-            COUT("Yes");
-            return;
-        }
-        else
-        {
-            COUT("No");
-            return;
-        }
-    }
 
-    if (s1.size() == 1)
-    {
-        COUT("Yes");
-        return;
+        re = max(re, cnt);
+        COUT("");
     }
-    else
-    {
-        COUT("No");
-        return;
-    }
+    COUT("");
 }
 
 //!________________________________ REALIZATION : inherently meaningless!  ______________________________________________
